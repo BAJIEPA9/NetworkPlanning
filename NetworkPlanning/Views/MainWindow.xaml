@@ -1,0 +1,71 @@
+﻿<Window x:Class="NetworkPlanning.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:v="clr-namespace:NetworkPlanning.Views"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:c="clr-namespace:NetworkPlanning.Converters"
+        mc:Ignorable="d"
+        Title="Network Planning"
+        WindowStartupLocation="CenterScreen"
+        Width="800"
+        Height="500"
+        MinWidth="800"
+        MinHeight="500">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Region MenuBar-->
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Command="{Binding AppCommands.OpenCommand}" />
+                <MenuItem Header="Save" Command="{Binding AppCommands.SaveCommand}"
+                          IsEnabled="{Binding SaveFile, Converter={c:ObjectToBoolConverter}}"/>
+                <MenuItem Header="SaveAs" Command="{Binding AppCommands.SaveAsCommand}" />
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Grid" Command="{Binding AppCommands.ShowTabCommand}"
+                          CommandParameter="{Binding ElementName=NetworkGrid}" />
+                <MenuItem Header="Graph" Command="{Binding AppCommands.ShowTabCommand}"
+                          CommandParameter="{Binding ElementName=NetworkGraph}" />
+            </MenuItem>
+        </Menu>
+
+        <!--Region DockingManager-->
+        <xcad:DockingManager Grid.Row="1">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane FloatingWidth="200" FloatingHeight="200">
+                            <xcad:LayoutAnchorable x:Name="NetworkGrid" Title="Grid" ContentId="NetworkGrid">
+                                <v:NetworkGridControl />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                    <xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane FloatingWidth="200" FloatingHeight="200">
+                            <xcad:LayoutAnchorable x:Name="NetworkGraph" Title="Graph" ContentId="NetworkGraph">
+                                <v:NetworkGraphControl />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+
+        <!--Region StatusBar-->
+        <TextBlock Grid.Row="2" HorizontalAlignment="Left">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}Current file: {0}">
+                    <Binding Path="SaveFile" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+    </Grid>
+</Window>
