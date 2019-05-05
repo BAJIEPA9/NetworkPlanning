@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Windows.Data;
 using NetworkPlanning.Abstraction;
 using NetworkPlanning.Commands;
@@ -11,6 +12,7 @@ namespace NetworkPlanning.ViewModels
     internal class MainViewModel : ViewModelBase
     {
         private readonly App _app;
+        private readonly NetworkObjectProvider _objectProvider;
         private readonly XmlService _xmlService;
 
         public MainViewModel(
@@ -22,6 +24,7 @@ namespace NetworkPlanning.ViewModels
             base(container)
         {
             container.RegisterInstance(this);
+            _objectProvider = objectProvider;
             _xmlService = xmlService;
             _app = app;
             AppCommands = commands;
@@ -61,7 +64,31 @@ namespace NetworkPlanning.ViewModels
                 }
             };
 
+            objectProvider.Works.CollectionChanged += (sender, e) =>
+            {
+                OnPropertyChanged(nameof(HasNoErrors));
+            };
+
             LoadLastSession();
+        }
+
+        public AppCommands AppCommands { get; }
+        public ListCollectionView Works { get; }
+
+        public bool HasNoErrors => _objectProvider.Works.All(x => x.Error == null);
+
+        private void LoadLastSession()
+        {
+            var path = _app.DefaultSaveFile;
+
+            if (File.Exists(path))
+            {
+                _xmlService.Import(path);
+            }
+            else
+            {
+                using (File.Create(path)) ;
+            }
         }
 
         #region SaveFile property: string
@@ -75,22 +102,5 @@ namespace NetworkPlanning.ViewModels
         private string _saveFile;
 
         #endregion
-
-        public AppCommands AppCommands { get; }
-        public ListCollectionView Works { get; }
-
-        private void LoadLastSession()
-        {
-            var path = _app.DefaultSaveFile;
-
-            if (File.Exists(path))
-            {
-                _xmlService.Import(path);
-            }
-            else
-            {
-                using (File.Create(path));
-            }
-        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Xml;
@@ -93,20 +92,20 @@ namespace NetworkPlanning.Services
                 {
                     var work = e.AddWork();
                     work.StartEvent = ParseInt(workNode.Element(nameof(WorkViewModel.StartEvent)));
-                    work.Duration = ParseInt(workNode.Element(nameof(WorkViewModel.Duration)));
+                    work.Duration = ParseInt(workNode.Element(nameof(WorkViewModel.Duration))) ?? 0;
                     work.Name = workNode.Element(nameof(WorkViewModel.Name))?.Value;
                 }
             }
         }
 
-        private int ParseInt(XElement element)
+        private int? ParseInt(XElement element)
         {
             if (int.TryParse(element.Value, out var value))
             {
                 return value;
             }
 
-            throw new Exception("Error while parse int.");
+            return null;
         }
     }
 }

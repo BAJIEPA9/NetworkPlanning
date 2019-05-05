@@ -60,12 +60,37 @@
         </xcad:DockingManager>
 
         <!--Region StatusBar-->
-        <TextBlock Grid.Row="2" HorizontalAlignment="Left">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}Current file: {0}">
-                    <Binding Path="SaveFile" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
+        <Grid Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Current file: {0}">
+                        <Binding Path="SaveFile" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Grid Grid.Column="1" Margin="5">
+                <Ellipse Fill="Red" />
+                <TextBlock Text="!" FontWeight="Bold" />
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <ToolTip Content="There are errors in grid." />
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasNoErrors}" Value="True">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

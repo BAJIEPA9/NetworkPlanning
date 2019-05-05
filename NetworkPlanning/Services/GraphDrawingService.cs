@@ -44,7 +44,7 @@ namespace NetworkPlanning.Services
                 group = _events
                     .Where(e => !checkedNodes.Contains(e) && e.Works.Count > 0 &&
                                 checkedNodes
-                                    .Select(l => l.EventNumber)
+                                    .Select(l => (int?) l.EventNumber)
                                     .Intersect(e.Works.Select(w => w.StartEvent))
                                     .Count() == e.Works.Count)
                     .ToList();

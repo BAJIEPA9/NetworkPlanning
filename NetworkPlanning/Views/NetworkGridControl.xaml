@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="NetworkPlanning.Views.NetworkGridControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:b="clr-namespace:NetworkPlanning.Behaviour"
@@ -27,8 +27,8 @@
                             <Grid Background="CadetBlue" x:Name="GroupHeader">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.25*" />
-                                    <ColumnDefinition Width="2.75*" />
-                                    <ColumnDefinition Width="0.965*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="0.85*" />
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Content="-"
                                         DataContext="{Binding ElementName=Root, Path=DataContext}"
@@ -41,7 +41,9 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <Button Grid.Column="2" Content="Add Work"
+                                <Button Grid.Column="2"
+                                        Content="+"
+                                        Background="CadetBlue"
                                         DataContext="{Binding ElementName=Root, Path=DataContext}"
                                         Command="{Binding AppCommands.AddWorkCommand}"
                                         CommandParameter="{Binding DataContext.Name, ElementName=GroupHeader}" />
@@ -56,8 +58,20 @@
                     <GridViewColumn Header="Start Event">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox SelectedItem="{Binding StartEvent}"
-                                          ItemsSource="{Binding AvailableStartEvents}" />
+                                <ComboBox Name="StartEventBox"
+                                          HorizontalAlignment="Center"
+                                          ItemsSource="{Binding AvailableStartEvents}"
+                                          Validation.ErrorTemplate="{StaticResource ValidationFailed}">
+                                    <ComboBox.SelectedItem>
+                                        <Binding Path="StartEvent"
+                                                 NotifyOnValidationError="True"
+                                                 UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </ComboBox.SelectedItem>
+                                </ComboBox>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -79,9 +93,10 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete"
+                                <Button Content="-"
                                         Command="{Binding AppCommands.DeleteWorkCommand}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}"
+                                        HorizontalAlignment="Center" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -90,7 +105,7 @@
 
             <i:Interaction.Behaviors>
                 <b:ListViewColumnBehavior />
-            </i:Interaction.Behaviors> 
+            </i:Interaction.Behaviors>
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

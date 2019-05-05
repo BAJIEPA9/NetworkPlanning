@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using NetworkPlanning.Abstraction;
 using NetworkPlanning.Commands;
 using NetworkPlanning.Services;
@@ -6,7 +7,7 @@ using Unity;
 
 namespace NetworkPlanning.ViewModels
 {
-    internal class WorkViewModel : ViewModelBase
+    internal class WorkViewModel : ViewModelBase, IDataErrorInfo
     {
         private readonly NetworkObjectProvider _objectProvider;
 
@@ -29,15 +30,55 @@ namespace NetworkPlanning.ViewModels
         public AppCommands AppCommands { get; }
         public EventViewModel Event { get; }
 
-        #region StartEvent property: int
+        public bool IsRecursivelyValidating { get; set; }
 
-        public int StartEvent
+        public string this[string columnName]
+        {
+            get
+            {
+                switch (columnName)
+                {
+                    case nameof(StartEvent):
+                    {
+                        Error = null;
+                        var otherWorksInEvent = Event.Works.Except(new[] {this}).ToArray();
+
+                        if (otherWorksInEvent.Any(x => x.StartEvent == StartEvent))
+                        {
+                            Error = "Duplicate work!";
+                        }
+                        else if (StartEvent == null)
+                        {
+                            Error = "Chose one.";
+                        }
+
+                        if (!IsRecursivelyValidating)
+                        {
+                            foreach (var work in otherWorksInEvent)
+                            {
+                                work.IsRecursivelyValidating = true;
+                                work.OnPropertyChanged(nameof(StartEvent));
+                                work.IsRecursivelyValidating = false;
+                            }
+
+                            Container.Resolve<MainViewModel>().OnPropertyChanged(nameof(MainViewModel.HasNoErrors));
+                        }
+                    } break;
+                }
+
+                return Error;
+            }
+        }
+
+        #region StartEvent property: int?
+
+        public int? StartEvent
         {
             get => _startEvent;
             set => SetProperty(ref _startEvent, value);
         }
 
-        private int _startEvent;
+        private int? _startEvent;
 
         #endregion
 
@@ -62,6 +103,18 @@ namespace NetworkPlanning.ViewModels
         }
 
         private string _name;
+
+        #endregion
+
+        #region Error property: string
+
+        public string Error
+        {
+            get => _error;
+            set => SetProperty(ref _error, value);
+        }
+
+        private string _error;
 
         #endregion
     }

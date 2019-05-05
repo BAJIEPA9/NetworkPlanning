@@ -14,7 +14,8 @@
         <Button Grid.Row="0"
                 Content="Refresh"
                 Command="{Binding AppCommands.RefreshGraphCommand}"
-                CommandParameter="{Binding ElementName=GraphCanvas}"/>
+                CommandParameter="{Binding ElementName=GraphCanvas}"
+                IsEnabled="{Binding HasNoErrors}" />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
             <Canvas Name="GraphCanvas" Height="10000" Width="10000" />
         </ScrollViewer>

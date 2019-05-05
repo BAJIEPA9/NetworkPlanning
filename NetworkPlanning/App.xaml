@@ -4,6 +4,15 @@
              StartupUri="Views/MainWindow.xaml">
 
     <Application.Resources>
+        <ControlTemplate x:Key="ValidationFailed">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="Red" FontSize="15" FontWeight="Bold" Margin="0">!</TextBlock>
+                <Border BorderThickness="1" BorderBrush="Red">
+                    <AdornedElementPlaceholder />
+                </Border>
+            </StackPanel>
+        </ControlTemplate>
+
         <Style TargetType="Control">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="Padding" Value="10 2 10 2" />
@@ -12,12 +21,26 @@
         <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
-        <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="ComboBox">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-        </Style>
         <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="GridViewColumnHeader">
             <Setter Property="IsEnabled" Value="False" />
         </Style>
+        <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="ComboBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                            Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="ToolTip">
+            <Setter Property="BorderBrush" Value="Red" />
+            <Setter Property="Background" Value="PaleVioletRed" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="Padding" Value="10 2 10 2" />
