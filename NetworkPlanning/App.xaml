@@ -4,9 +4,15 @@
              StartupUri="Views/MainWindow.xaml">
 
     <Application.Resources>
+        <ImageSource x:Key="IconImage">Views/Icons/graph.png</ImageSource>
+
         <ControlTemplate x:Key="ValidationFailed">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="Red" FontSize="15" FontWeight="Bold" Margin="0">!</TextBlock>
+                <TextBlock Foreground="Red"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Margin="-5"
+                           Text="!" />
                 <Border BorderThickness="1" BorderBrush="Red">
                     <AdornedElementPlaceholder />
                 </Border>
@@ -16,6 +22,7 @@
         <Style TargetType="Control">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="Padding" Value="10 2 10 2" />
+            <Setter Property="Margin" Value="0" />
         </Style>
         <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="TextBox" />
         <Style BasedOn="{StaticResource {x:Type Control}}" TargetType="Label">

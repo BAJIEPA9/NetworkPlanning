@@ -26,27 +26,26 @@
                         <DataTemplate>
                             <Grid Background="CadetBlue" x:Name="GroupHeader">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.25*" />
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="0.85*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Content="-"
                                         DataContext="{Binding ElementName=Root, Path=DataContext}"
                                         Command="{Binding AppCommands.DeleteEventCommand}"
                                         CommandParameter="{Binding DataContext.Name, ElementName=GroupHeader}" />
-                                <TextBlock Grid.Column="1" FontWeight="Bold">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}Event: {0}">
-                                            <Binding Path="Name" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <Button Grid.Column="2"
-                                        Content="+"
+                                <Button Grid.Column="1"
                                         Background="CadetBlue"
                                         DataContext="{Binding ElementName=Root, Path=DataContext}"
                                         Command="{Binding AppCommands.AddWorkCommand}"
-                                        CommandParameter="{Binding DataContext.Name, ElementName=GroupHeader}" />
+                                        CommandParameter="{Binding DataContext.Name, ElementName=GroupHeader}">
+                                    <TextBlock FontWeight="Bold">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}Event: {0}">
+                                                <Binding Path="DataContext.Name" ElementName="GroupHeader" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
@@ -59,7 +58,6 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox Name="StartEventBox"
-                                          HorizontalAlignment="Center"
                                           ItemsSource="{Binding AvailableStartEvents}"
                                           Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                                     <ComboBox.SelectedItem>
@@ -95,8 +93,7 @@
                             <DataTemplate>
                                 <Button Content="-"
                                         Command="{Binding AppCommands.DeleteWorkCommand}"
-                                        CommandParameter="{Binding}"
-                                        HorizontalAlignment="Center" />
+                                        CommandParameter="{Binding}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -110,6 +107,8 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
