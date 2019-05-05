@@ -1,4 +1,2 @@
-﻿Duplicate works error.
-Empty works error.
-Numbers on lines.
+﻿Numbers on lines.
 DnD.

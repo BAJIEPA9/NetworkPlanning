@@ -71,7 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Abstraction\ViewModelBase.cs" />
-    <Compile Include="Behaviour\ListViewColumnBehavior.cs" />
+    <Compile Include="Behaviour\TextBoxInputValidationBehavior.cs" />
     <Compile Include="Commands\AppCommands.AddEventCommand.cs" />
     <Compile Include="Commands\AppCommands.AddWorkCommand.cs" />
     <Compile Include="Commands\AppCommands.cs" />
@@ -130,5 +130,6 @@
   <ItemGroup>
     <Resource Include="Views\Icons\graph.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -16,11 +16,18 @@
         <Button Grid.Row="0" Content="Add Event"
                 Command="{Binding AppCommands.AddEventCommand}" />
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Works}"
+        <DataGrid Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  RowHeaderWidth="0"
+                  ItemsSource="{Binding Works}"
+                  CanUserResizeRows="False"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                  SelectionMode="Single">
 
-            <ListView.GroupStyle>
+            <DataGrid.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
@@ -29,6 +36,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
+
                                 <Button Grid.Column="0" Content="-"
                                         DataContext="{Binding ElementName=Root, Path=DataContext}"
                                         Command="{Binding AppCommands.DeleteEventCommand}"
@@ -50,67 +58,59 @@
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
-            </ListView.GroupStyle>
+            </DataGrid.GroupStyle>
 
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Start Event">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox Name="StartEventBox"
-                                          ItemsSource="{Binding AvailableStartEvents}"
-                                          Validation.ErrorTemplate="{StaticResource ValidationFailed}">
-                                    <ComboBox.SelectedItem>
-                                        <Binding Path="StartEvent"
-                                                 NotifyOnValidationError="True"
-                                                 UpdateSourceTrigger="PropertyChanged">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </ComboBox.SelectedItem>
-                                </ComboBox>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Duration">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Duration}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Work Name">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox TextWrapping="WrapWithOverflow"
-                                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="-"
-                                        Command="{Binding AppCommands.DeleteWorkCommand}"
-                                        CommandParameter="{Binding}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*" Header="StartEvent">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Name="StartEventBox"
+                                      ItemsSource="{Binding AvailableStartEvents}"
+                                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
+                                <ComboBox.SelectedItem>
+                                    <Binding Path="StartEvent"
+                                             NotifyOnValidationError="True"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <DataErrorValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </ComboBox.SelectedItem>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*" Header="Duration">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Duration}"
+                                     MaxLength="4">
+                                <i:Interaction.Behaviors>
+                                    <b:TextBoxInputValidationBehavior Regexp="^0$|^[1-9][0-9]*$"/>
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*" Header="Work Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox TextWrapping="WrapWithOverflow"
+                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="-"
+                                    Command="{Binding AppCommands.DeleteWorkCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
 
-            <i:Interaction.Behaviors>
-                <b:ListViewColumnBehavior />
-            </i:Interaction.Behaviors>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="0" />
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+        </DataGrid>
     </Grid>
 </UserControl>

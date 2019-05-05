@@ -66,6 +66,18 @@ namespace NetworkPlanning.ViewModels
 
             objectProvider.Works.CollectionChanged += (sender, e) =>
             {
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    var work = (WorkViewModel) e.OldItems[0];
+
+                    foreach (var w in work.Event.Works
+                        .Except(new []{work})
+                        .Where(x => x.StartEvent == work.StartEvent))
+                    {
+                        w.OnPropertyChanged(nameof(WorkViewModel.StartEvent));
+                    }
+                }
+
                 OnPropertyChanged(nameof(HasNoErrors));
             };
 
@@ -87,7 +99,7 @@ namespace NetworkPlanning.ViewModels
             }
             else
             {
-                using (File.Create(path)) ;
+                using (File.Create(path));
             }
         }
 
