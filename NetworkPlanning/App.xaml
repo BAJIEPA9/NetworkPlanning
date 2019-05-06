@@ -5,6 +5,7 @@
 
     <Application.Resources>
         <ImageSource x:Key="IconImage">Views/Icons/graph.png</ImageSource>
+        <ImageSource x:Key="CanvasImage">Views/Icons/canvas.jpg</ImageSource>
 
         <ControlTemplate x:Key="ValidationFailed">
             <StackPanel Orientation="Horizontal">

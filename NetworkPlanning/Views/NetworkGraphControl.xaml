@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:NetworkPlanning.Behaviour"
              mc:Ignorable="d">
 
     <Grid>
@@ -17,7 +19,17 @@
                 CommandParameter="{Binding ElementName=GraphCanvas}"
                 IsEnabled="{Binding HasNoErrors}" />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
-            <Canvas Name="GraphCanvas" Height="10000" Width="10000" />
+            <Canvas x:Name="GraphCanvas"
+                    Width="1920"
+                    Height="1080">
+                <Canvas.Background>
+                    <ImageBrush ImageSource="{StaticResource CanvasImage}"
+                                Stretch="Fill" />
+                </Canvas.Background>
+                <i:Interaction.Behaviors>
+                    <b:CanvasDropBehavior />
+                </i:Interaction.Behaviors>
+            </Canvas>
         </ScrollViewer>
     </Grid>
 </UserControl>

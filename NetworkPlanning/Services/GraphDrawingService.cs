@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interactivity;
 using System.Windows.Shapes;
+using NetworkPlanning.Behaviour;
 using NetworkPlanning.ViewModels;
 using Unity;
 
@@ -58,6 +60,12 @@ namespace NetworkPlanning.Services
 
             foreach (var @event in _events)
             {
+                @event.OutLines.Clear();
+                @event.InLines.Clear();
+            }
+
+            foreach (var @event in _events)
+            {
                 DrawLines(canvas, @event);
             }
         }
@@ -70,11 +78,13 @@ namespace NetworkPlanning.Services
 
             foreach (var node in nodes)
             {
-                DrawLine(canvas, @event, node);
+                var line = DrawLine(canvas, @event, node);
+                @event.OutLines.Add(line);
+                node.InLines.Add(line);
             }
         }
 
-        private void DrawLine(Canvas canvas, EventViewModel left, EventViewModel right)
+        private Line DrawLine(Canvas canvas, EventViewModel left, EventViewModel right)
         {
             var line = new Line
             {
@@ -85,6 +95,8 @@ namespace NetworkPlanning.Services
             };
 
             canvas.Children.Add(line);
+
+            return line;
         }
 
         private void DrawGroup(Canvas canvas, IEnumerable<EventViewModel> group, int x, ref int y)
@@ -94,6 +106,7 @@ namespace NetworkPlanning.Services
                 @event.Left = x;
                 @event.Top = y;
                 var node = CreateNode(@event.EventNumber);
+                node.DataContext = @event;
                 canvas.Children.Add(node);
                 Canvas.SetLeft(node, x);
                 Canvas.SetTop(node, y);
@@ -120,6 +133,7 @@ namespace NetworkPlanning.Services
 
             grid.Children.Add(el);
             grid.Children.Add(text);
+            Interaction.GetBehaviors(grid).Add(new UiElementDragBehavior());
             return grid;
         }
     }

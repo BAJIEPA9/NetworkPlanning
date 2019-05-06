@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Shapes;
 using NetworkPlanning.Abstraction;
 using Unity;
 
@@ -14,6 +16,9 @@ namespace NetworkPlanning.ViewModels
 
         public ObservableCollection<WorkViewModel> Works { get; } =
             new ObservableCollection<WorkViewModel>();
+
+        public List<Line> InLines { get; } = new List<Line>();
+        public List<Line> OutLines { get; } =new List<Line>();
 
         #region EventNumber property: int
 
