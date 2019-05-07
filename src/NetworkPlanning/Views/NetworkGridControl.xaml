@@ -19,7 +19,7 @@
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   RowHeaderWidth="0"
-                  ItemsSource="{Binding Works}"
+                  ItemsSource="{Binding WorksCollectionView}"
                   CanUserResizeRows="False"
                   CanUserResizeColumns="False"
                   CanUserReorderColumns="False"

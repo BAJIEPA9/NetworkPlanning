@@ -67,9 +67,17 @@
         </Style>
         <Style TargetType="Ellipse">
             <Setter Property="Fill" Value="Khaki" />
+            <Setter Property="Stroke" Value="Black" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
+                             Value="True">
+                    <Setter Property="StrokeThickness" Value="2" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="Line">
-            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="StrokeThickness" Value="1" />
             <Setter Property="Stroke" Value="Black" />
         </Style>
     </Application.Resources>

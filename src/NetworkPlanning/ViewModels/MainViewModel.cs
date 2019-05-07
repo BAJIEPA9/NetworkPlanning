@@ -28,9 +28,9 @@ namespace NetworkPlanning.ViewModels
             _xmlService = xmlService;
             _app = app;
             AppCommands = commands;
-            Works = (ListCollectionView) CollectionViewSource.GetDefaultView(objectProvider.Works);
+            WorksCollectionView = (ListCollectionView) CollectionViewSource.GetDefaultView(objectProvider.Works);
             var groupDescription = new PropertyGroupDescription(nameof(WorkViewModel.Event));
-            Works.GroupDescriptions.Add(groupDescription);
+            WorksCollectionView.GroupDescriptions.Add(groupDescription);
 
             objectProvider.Events.CollectionChanged += (sender, e) =>
             {
@@ -41,8 +41,7 @@ namespace NetworkPlanning.ViewModels
                     case NotifyCollectionChangedAction.Add:
                     {
                         names.Add(e.NewItems[0]);
-                    }
-                        break;
+                    } break;
 
                     case NotifyCollectionChangedAction.Remove:
                     {
@@ -53,14 +52,24 @@ namespace NetworkPlanning.ViewModels
                         {
                             ((EventViewModel) names[i]).EventNumber = i + 1;
                         }
-                    }
-                        break;
+
+                        foreach (var work in _objectProvider.Works
+                            .Where(x => x.StartEvent == @event.EventNumber))
+                        {
+                            work.StartEvent = null;
+                        }
+
+                        foreach (var work in _objectProvider.Works
+                            .Where(x => x.StartEvent == x.Event.EventNumber))
+                        {
+                            work.StartEvent = null;
+                        }
+                    } break;
 
                     case NotifyCollectionChangedAction.Reset:
                     {
                         names.Clear();
-                    }
-                        break;
+                    } break;
                 }
             };
 
@@ -85,7 +94,7 @@ namespace NetworkPlanning.ViewModels
         }
 
         public AppCommands AppCommands { get; }
-        public ListCollectionView Works { get; }
+        public ListCollectionView WorksCollectionView { get; }
 
         public bool HasNoErrors => _objectProvider.Works.All(x => x.Error == null);
 

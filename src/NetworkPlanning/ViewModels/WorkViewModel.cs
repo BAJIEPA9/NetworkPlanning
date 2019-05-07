@@ -105,7 +105,7 @@ namespace NetworkPlanning.ViewModels
         private string _name;
 
         #endregion
-
+        
         #region Error property: string
 
         public string Error

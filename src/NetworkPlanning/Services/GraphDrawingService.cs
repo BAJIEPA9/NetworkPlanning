@@ -14,11 +14,11 @@ namespace NetworkPlanning.Services
     internal class GraphDrawingService
     {
         private const double EllipseWidth = 60;
-        private readonly double _ellipseRadius;
         private const int StartY = 30;
         private const int StartX = 30;
         private const int DeltaX = 120;
         private const int DeltaY = 85;
+        private readonly double _ellipseRadius;
         private readonly ObservableCollection<EventViewModel> _events;
 
         public GraphDrawingService(
@@ -118,7 +118,7 @@ namespace NetworkPlanning.Services
         {
             var grid = new Grid();
 
-            var el = new Ellipse
+            var ellipse = new Ellipse
             {
                 Width = EllipseWidth,
                 Height = EllipseWidth
@@ -131,9 +131,9 @@ namespace NetworkPlanning.Services
                 FontSize = 30
             };
 
-            grid.Children.Add(el);
+            grid.Children.Add(ellipse);
             grid.Children.Add(text);
-            Interaction.GetBehaviors(grid).Add(new UiElementDragBehavior());
+            Interaction.GetBehaviors(grid).Add(new UiElementDragBehavior {Ellipse = ellipse});
             return grid;
         }
     }
