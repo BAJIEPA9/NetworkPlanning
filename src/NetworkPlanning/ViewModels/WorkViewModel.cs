@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using NetworkPlanning.Abstraction;
 using NetworkPlanning.Commands;
@@ -22,6 +25,7 @@ namespace NetworkPlanning.ViewModels
             _objectProvider = objectProvider;
             AppCommands = commands;
             EndEvent = @event;
+            LineText.Text = Duration.ToString();
         }
 
         public EventViewModel[] AvailableStartEvents => _objectProvider.Events
@@ -31,6 +35,7 @@ namespace NetworkPlanning.ViewModels
         public AppCommands AppCommands { get; }
         public EventViewModel EndEvent { get; }
         public Line Line { get; } = new Line();
+        public TextBlock LineText { get; } = new TextBlock {Foreground = Brushes.Blue};
 
         public bool IsRecursivelyValidating { get; set; }
 
@@ -65,11 +70,25 @@ namespace NetworkPlanning.ViewModels
 
                             Container.Resolve<MainViewModel>().OnPropertyChanged(nameof(MainViewModel.HasNoErrors));
                         }
-                    } break;
+                    }
+                        break;
                 }
 
                 return Error;
             }
+        }
+
+        public void ArrangeLineText()
+        {
+            if (!LineText.IsLoaded)
+            {
+                Line.UpdateLayout();
+            }
+
+            Canvas.SetLeft(LineText, Math.Min(Line.X1, Line.X2) +
+                                     (Math.Abs(Line.X1 - Line.X2) - LineText.ActualWidth) * 0.5d);
+            Canvas.SetTop(LineText, Math.Min(Line.Y1, Line.Y2) +
+                                    (Math.Abs(Line.Y1 - Line.Y2) - LineText.ActualHeight) * 0.5d);
         }
 
         #region StartEvent property: EventViewModel
@@ -98,7 +117,13 @@ namespace NetworkPlanning.ViewModels
         public int Duration
         {
             get => _duration;
-            set => SetProperty(ref _duration, value);
+            set
+            {
+                if (SetProperty(ref _duration, value))
+                {
+                    LineText.Text = value.ToString();
+                }
+            }
         }
 
         private int _duration;
@@ -116,7 +141,7 @@ namespace NetworkPlanning.ViewModels
         private string _name;
 
         #endregion
-        
+
         #region Error property: string
 
         public string Error

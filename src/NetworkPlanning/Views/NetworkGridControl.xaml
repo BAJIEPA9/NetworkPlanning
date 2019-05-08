@@ -89,7 +89,7 @@
                 <DataGridTemplateColumn Width="*" Header="Duration">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Duration}"
+                            <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
                                      MaxLength="4">
                                 <i:Interaction.Behaviors>
                                     <b:TextBoxInputValidationBehavior Regexp="^0$|^[1-9][0-9]*$" />

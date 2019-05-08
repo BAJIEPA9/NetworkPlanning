@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using NetworkPlanning.ViewModels;
@@ -24,6 +23,12 @@ namespace NetworkPlanning.Behaviour
         private void AssociatedObjectOnDrop(object sender, DragEventArgs e)
         {
             var node = (FrameworkElement) e.Data.GetData(e.Data.GetFormats()[0]);
+
+            if (node == null)
+            {
+                return;
+            }
+
             var @event = (EventViewModel) node.DataContext;
             var position = e.GetPosition(AssociatedObject);
             var halfWidth = node.ActualWidth / 2;
@@ -37,16 +42,18 @@ namespace NetworkPlanning.Behaviour
             Canvas.SetTop(node, top);
             Canvas.SetLeft(node, left);
 
-            foreach (var line in @event.InWorks.Select(x => x.Line))
+            foreach (var work in @event.InWorks)
             {
-                line.Y2 = lineTop;
-                line.X2 = left;
+                work.Line.Y2 = lineTop;
+                work.Line.X2 = left;
+                work.ArrangeLineText();
             }
 
-            foreach (var line in @event.OutWorks.Select(x => x.Line))
+            foreach (var work in @event.OutWorks)
             {
-                line.Y1 = lineTop;
-                line.X1 = left + node.ActualWidth;
+                work.Line.Y1 = lineTop;
+                work.Line.X1 = left + node.ActualWidth;
+                work.ArrangeLineText();
             }
         }
     }

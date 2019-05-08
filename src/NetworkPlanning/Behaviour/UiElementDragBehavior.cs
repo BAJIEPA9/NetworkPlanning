@@ -80,6 +80,7 @@ namespace NetworkPlanning.Behaviour
 
         private void DragEndAction()
         {
+            _isDragging = false;
             Ellipse.Fill = _initialEllipseBrush;
         }
     }

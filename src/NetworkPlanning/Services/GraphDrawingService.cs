@@ -68,15 +68,22 @@ namespace NetworkPlanning.Services
             foreach (var work in @event.OutWorks)
             {
                 var line = work.Line;
-                line.X1 = @event.Left + EllipseWidth;
-                line.X2 = work.EndEvent.Left;
-                line.Y1 = @event.Top + _ellipseRadius;
-                line.Y2 = work.EndEvent.Top + _ellipseRadius;
 
                 if (!canvas.Children.Contains(line))
                 {
                     canvas.Children.Add(line);
                 }
+
+                if (!canvas.Children.Contains(work.LineText))
+                {
+                    canvas.Children.Add(work.LineText);
+                }
+
+                line.X1 = @event.Left + EllipseWidth;
+                line.X2 = work.EndEvent.Left;
+                line.Y1 = @event.Top + _ellipseRadius;
+                line.Y2 = work.EndEvent.Top + _ellipseRadius;
+                work.ArrangeLineText();
             }
         }
 
