@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Windows.Shapes;
 using NetworkPlanning.Abstraction;
 using NetworkPlanning.Commands;
 using NetworkPlanning.Services;
@@ -20,15 +21,16 @@ namespace NetworkPlanning.ViewModels
         {
             _objectProvider = objectProvider;
             AppCommands = commands;
-            Event = @event;
+            EndEvent = @event;
         }
 
-        public int[] AvailableStartEvents => _objectProvider.Events
-            .Where(x => x.EventNumber < Event.EventNumber)
-            .Select(y => y.EventNumber).ToArray();
+        public EventViewModel[] AvailableStartEvents => _objectProvider.Events
+            .Where(x => x.EventNumber < EndEvent.EventNumber)
+            .ToArray();
 
         public AppCommands AppCommands { get; }
-        public EventViewModel Event { get; }
+        public EventViewModel EndEvent { get; }
+        public Line Line { get; } = new Line();
 
         public bool IsRecursivelyValidating { get; set; }
 
@@ -41,7 +43,7 @@ namespace NetworkPlanning.ViewModels
                     case nameof(StartEvent):
                     {
                         Error = null;
-                        var otherWorksInEvent = Event.Works.Except(new[] {this}).ToArray();
+                        var otherWorksInEvent = EndEvent.InWorks.Except(new[] {this}).ToArray();
 
                         if (otherWorksInEvent.Any(x => x.StartEvent == StartEvent))
                         {
@@ -70,15 +72,24 @@ namespace NetworkPlanning.ViewModels
             }
         }
 
-        #region StartEvent property: int?
+        #region StartEvent property: EventViewModel
 
-        public int? StartEvent
+        public EventViewModel StartEvent
         {
             get => _startEvent;
-            set => SetProperty(ref _startEvent, value);
+            set
+            {
+                if (StartEvent != null && StartEvent.OutWorks.Contains(this))
+                {
+                    StartEvent.OutWorks.Remove(this);
+                }
+
+                SetProperty(ref _startEvent, value);
+                StartEvent?.OutWorks.Add(this);
+            }
         }
 
-        private int? _startEvent;
+        private EventViewModel _startEvent;
 
         #endregion
 

@@ -19,14 +19,14 @@ namespace NetworkPlanning.Extensions
         public static WorkViewModel AddWork(this EventViewModel @event)
         {
             var viewModel = _provider.GetWorkViewModel(@event);
-            @event.Works.Add(viewModel);
+            @event.InWorks.Add(viewModel);
             _objectProvider.Works.Add(viewModel);
             return viewModel;
         }
 
         public static void RemoveWork(this EventViewModel @event, WorkViewModel work)
         {
-            @event.Works.Remove(work);
+            @event.InWorks.Remove(work);
             _objectProvider.Works.Remove(work);
         }
     }

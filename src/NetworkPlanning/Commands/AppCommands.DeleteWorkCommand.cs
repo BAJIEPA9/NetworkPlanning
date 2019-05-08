@@ -21,7 +21,7 @@ namespace NetworkPlanning.Commands
         /// </summary>
         private void ExecuteDeleteWork(WorkViewModel param)
         {
-            var @event = _objectProvider.Events.FirstOrDefault(x => x.EventNumber == param.Event.EventNumber);
+            var @event = _objectProvider.Events.FirstOrDefault(x => x.EventNumber == param.EndEvent.EventNumber);
             @event.RemoveWork(param);
         }
 

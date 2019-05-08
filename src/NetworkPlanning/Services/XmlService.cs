@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -46,7 +47,7 @@ namespace NetworkPlanning.Services
 
                 eventKeys.Add(new XElement(nameof(EventViewModel.EventNumber), model.EventNumber));
 
-                foreach (var work in model.Works)
+                foreach (var work in model.InWorks)
                 {
                     var workNode = new XElement(_workName);
                     workNode.Add(new XElement(nameof(WorkViewModel.Name), work.Name));
@@ -70,11 +71,23 @@ namespace NetworkPlanning.Services
 
         public void Import(string path)
         {
-            if (!File.Exists(path)) return;
-            _objectProvider.Works.Clear();
-            _objectProvider.Events.Clear();
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
             var document = XDocument.Load(path);
-            var descendants = document.Descendants(_eventName);
+            var descendants = document.Descendants(_eventName).ToArray();
+
+            if (descendants.Length > 0)
+            {
+                _objectProvider.Works.Clear();
+                _objectProvider.Events.Clear();
+            }
+            else
+            {
+                return;
+            }
 
             foreach (var descendant in descendants)
             {
@@ -91,7 +104,14 @@ namespace NetworkPlanning.Services
                 foreach (var workNode in workNodes)
                 {
                     var work = e.AddWork();
-                    work.StartEvent = ParseInt(workNode.Element(nameof(WorkViewModel.StartEvent)));
+                    var startEventNumber = ParseInt(workNode.Element(nameof(WorkViewModel.StartEvent)));
+
+                    if (startEventNumber != null)
+                    {
+                        work.StartEvent = _objectProvider.Events
+                            .First(x => x.EventNumber == startEventNumber);
+                    }
+
                     work.Duration = ParseInt(workNode.Element(nameof(WorkViewModel.Duration))) ?? 0;
                     work.Name = workNode.Element(nameof(WorkViewModel.Name))?.Value;
                 }

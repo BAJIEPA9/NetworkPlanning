@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using NetworkPlanning.ViewModels;
@@ -36,13 +37,13 @@ namespace NetworkPlanning.Behaviour
             Canvas.SetTop(node, top);
             Canvas.SetLeft(node, left);
 
-            foreach (var line in @event.InLines)
+            foreach (var line in @event.InWorks.Select(x => x.Line))
             {
                 line.Y2 = lineTop;
                 line.X2 = left;
             }
 
-            foreach (var line in @event.OutLines)
+            foreach (var line in @event.OutWorks.Select(x => x.Line))
             {
                 line.Y1 = lineTop;
                 line.X1 = left + node.ActualWidth;

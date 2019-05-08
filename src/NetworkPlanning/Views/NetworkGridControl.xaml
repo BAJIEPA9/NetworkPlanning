@@ -57,6 +57,12 @@
                             </Grid>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
+
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter />
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
                 </GroupStyle>
             </DataGrid.GroupStyle>
 
@@ -86,7 +92,7 @@
                             <TextBox Text="{Binding Duration}"
                                      MaxLength="4">
                                 <i:Interaction.Behaviors>
-                                    <b:TextBoxInputValidationBehavior Regexp="^0$|^[1-9][0-9]*$"/>
+                                    <b:TextBoxInputValidationBehavior Regexp="^0$|^[1-9][0-9]*$" />
                                 </i:Interaction.Behaviors>
                             </TextBox>
                         </DataTemplate>

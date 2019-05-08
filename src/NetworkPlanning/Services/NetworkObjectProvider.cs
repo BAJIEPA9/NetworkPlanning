@@ -36,7 +36,7 @@ namespace NetworkPlanning.Services
             {
                 Events.Remove(viewModel);
 
-                foreach (var work in viewModel.Works)
+                foreach (var work in viewModel.InWorks)
                 {
                     Works.Remove(work);
                 }

@@ -36,7 +36,7 @@ namespace NetworkPlanning.Services
             var checkedNodes = new List<EventViewModel>();
             var x = StartX;
             var y = StartY;
-            var group = _events.Where(e => e.Works.Count == 0).ToList();
+            var group = _events.Where(e => e.InWorks.Count == 0).ToList();
             checkedNodes = checkedNodes.Concat(group).ToList();
 
             while (checkedNodes.Count != _events.Count)
@@ -44,11 +44,10 @@ namespace NetworkPlanning.Services
                 DrawGroup(canvas, group, x, ref y);
 
                 group = _events
-                    .Where(e => !checkedNodes.Contains(e) && e.Works.Count > 0 &&
+                    .Where(e => !checkedNodes.Contains(e) && e.InWorks.Count > 0 &&
                                 checkedNodes
-                                    .Select(l => (int?) l.EventNumber)
-                                    .Intersect(e.Works.Select(w => w.StartEvent))
-                                    .Count() == e.Works.Count)
+                                    .Intersect(e.InWorks.Select(w => w.StartEvent))
+                                    .Count() == e.InWorks.Count)
                     .ToList();
 
                 checkedNodes = checkedNodes.Concat(group).ToList();
@@ -60,43 +59,25 @@ namespace NetworkPlanning.Services
 
             foreach (var @event in _events)
             {
-                @event.OutLines.Clear();
-                @event.InLines.Clear();
-            }
-
-            foreach (var @event in _events)
-            {
                 DrawLines(canvas, @event);
             }
         }
 
         private void DrawLines(Canvas canvas, EventViewModel @event)
         {
-            var nodes = _events
-                .Where(x => x.Works.Select(w => w.StartEvent).Contains(@event.EventNumber))
-                .ToArray();
-
-            foreach (var node in nodes)
+            foreach (var work in @event.OutWorks)
             {
-                var line = DrawLine(canvas, @event, node);
-                @event.OutLines.Add(line);
-                node.InLines.Add(line);
+                var line = work.Line;
+                line.X1 = @event.Left + EllipseWidth;
+                line.X2 = work.EndEvent.Left;
+                line.Y1 = @event.Top + _ellipseRadius;
+                line.Y2 = work.EndEvent.Top + _ellipseRadius;
+
+                if (!canvas.Children.Contains(line))
+                {
+                    canvas.Children.Add(line);
+                }
             }
-        }
-
-        private Line DrawLine(Canvas canvas, EventViewModel left, EventViewModel right)
-        {
-            var line = new Line
-            {
-                X1 = left.Left + EllipseWidth,
-                X2 = right.Left,
-                Y1 = left.Top + _ellipseRadius,
-                Y2 = right.Top + _ellipseRadius
-            };
-
-            canvas.Children.Add(line);
-
-            return line;
         }
 
         private void DrawGroup(Canvas canvas, IEnumerable<EventViewModel> group, int x, ref int y)

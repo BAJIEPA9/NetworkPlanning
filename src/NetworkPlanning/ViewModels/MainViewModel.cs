@@ -29,7 +29,7 @@ namespace NetworkPlanning.ViewModels
             _app = app;
             AppCommands = commands;
             WorksCollectionView = (ListCollectionView) CollectionViewSource.GetDefaultView(objectProvider.Works);
-            var groupDescription = new PropertyGroupDescription(nameof(WorkViewModel.Event));
+            var groupDescription = new PropertyGroupDescription(nameof(WorkViewModel.EndEvent));
             WorksCollectionView.GroupDescriptions.Add(groupDescription);
 
             objectProvider.Events.CollectionChanged += (sender, e) =>
@@ -54,14 +54,9 @@ namespace NetworkPlanning.ViewModels
                         }
 
                         foreach (var work in _objectProvider.Works
-                            .Where(x => x.StartEvent == @event.EventNumber))
+                            .Where(x => x.StartEvent != null && x.StartEvent.Equals(@event)))
                         {
-                            work.StartEvent = null;
-                        }
-
-                        foreach (var work in _objectProvider.Works
-                            .Where(x => x.StartEvent == x.Event.EventNumber))
-                        {
+                            work.StartEvent.OutWorks.Remove(work);
                             work.StartEvent = null;
                         }
                     } break;
@@ -79,12 +74,14 @@ namespace NetworkPlanning.ViewModels
                 {
                     var work = (WorkViewModel) e.OldItems[0];
 
-                    foreach (var w in work.Event.Works
+                    foreach (var w in work.EndEvent.InWorks
                         .Except(new []{work})
                         .Where(x => x.StartEvent == work.StartEvent))
                     {
                         w.OnPropertyChanged(nameof(WorkViewModel.StartEvent));
                     }
+
+                    work.StartEvent?.OutWorks.Remove(work);
                 }
 
                 OnPropertyChanged(nameof(HasNoErrors));
