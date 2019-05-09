@@ -38,7 +38,8 @@ namespace NetworkPlanning
                 .RegisterType<XmlService>()
                 .RegisterType<AppCommands>()
                 .RegisterSingleton<NetworkGraphControl>()
-                .RegisterSingleton<NetworkGridControl>();
+                .RegisterSingleton<NetworkGridControl>()
+                .RegisterSingleton<EstimationControl>();
 
             EventExtension.Initialize(container);
         }

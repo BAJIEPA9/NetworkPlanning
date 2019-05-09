@@ -120,5 +120,29 @@ namespace NetworkPlanning.ViewModels
         private string _saveFile;
 
         #endregion
+
+        #region CriticalPath property: string
+
+        public string CriticalPath
+        {
+            get => _criticalPath;
+            set => SetProperty(ref _criticalPath, value);
+        }
+
+        private string _criticalPath;
+
+        #endregion
+
+        #region OtherWays property: string
+
+        public string OtherWays
+        {
+            get => _otherWays;
+            set => SetProperty(ref _otherWays, value);
+        }
+
+        private string _otherWays;
+
+        #endregion
     }
 }

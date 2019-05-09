@@ -96,12 +96,19 @@
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\WorkViewModel.cs" />
+    <Compile Include="Views\EstimationControl.xaml.cs">
+      <DependentUpon>EstimationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NetworkGraphControl.xaml.cs">
       <DependentUpon>NetworkGraphControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NetworkGridControl.xaml.cs">
       <DependentUpon>NetworkGridControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\EstimationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interactivity;
-using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace NetworkPlanning.Behaviour
@@ -20,20 +19,20 @@ namespace NetworkPlanning.Behaviour
 
         public Ellipse Ellipse
         {
-            get { return (Ellipse) GetValue(EllipseProperty); }
-            set { SetValue(EllipseProperty, value); }
+            get => (Ellipse) GetValue(EllipseProperty);
+            set => SetValue(EllipseProperty, value);
         }
 
         #endregion
 
         private bool _isDragging;
-        private Brush _initialEllipseBrush;
+        private Style _defaultEllipseStyle;
 
         protected override void OnAttached()
         {
+            _defaultEllipseStyle = Ellipse.Style;
+
             base.OnAttached();
-            _initialEllipseBrush = Ellipse.Fill.Clone();
-            
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseLeftButtonDown;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseEnter += AssociatedObjectOnMouseEnter;
@@ -50,7 +49,7 @@ namespace NetworkPlanning.Behaviour
         private void AssociatedObject_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _isDragging = true;
-            Ellipse.Fill = Brushes.DarkSalmon;
+            Ellipse.Style = Application.Current.FindResource("EllipseMouseDown") as Style;
         }
 
         private void AssociatedObject_MouseMove(object sender, MouseEventArgs e)
@@ -81,7 +80,7 @@ namespace NetworkPlanning.Behaviour
         private void DragEndAction()
         {
             _isDragging = false;
-            Ellipse.Fill = _initialEllipseBrush;
+            Ellipse.Style = _defaultEllipseStyle;
         }
     }
 }

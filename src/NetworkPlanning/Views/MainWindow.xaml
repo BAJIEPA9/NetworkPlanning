@@ -35,6 +35,8 @@
                           CommandParameter="{Binding ElementName=NetworkGrid}" />
                 <MenuItem Header="Graph" Command="{Binding AppCommands.ShowTabCommand}"
                           CommandParameter="{Binding ElementName=NetworkGraph}" />
+                <MenuItem Header="Estimation" Command="{Binding AppCommands.ShowTabCommand}"
+                          CommandParameter="{Binding ElementName=Estimation}" />
             </MenuItem>
         </Menu>
 
@@ -42,16 +44,19 @@
         <xcad:DockingManager Grid.Row="1">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel Orientation="Horizontal">
-                    <xcad:LayoutAnchorablePaneGroup>
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="*">
                         <xcad:LayoutAnchorablePane FloatingWidth="200" FloatingHeight="200">
-                            <xcad:LayoutAnchorable x:Name="NetworkGrid" Title="Grid" ContentId="NetworkGrid">
+                            <xcad:LayoutAnchorable x:Name="NetworkGrid" Title="Grid">
                                 <v:NetworkGridControl />
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable x:Name="Estimation" Title="Estimation">
+                                <v:EstimationControl />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
-                    <xcad:LayoutAnchorablePaneGroup>
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
                         <xcad:LayoutAnchorablePane FloatingWidth="200" FloatingHeight="200">
-                            <xcad:LayoutAnchorable x:Name="NetworkGraph" Title="Graph" ContentId="NetworkGraph">
+                            <xcad:LayoutAnchorable x:Name="NetworkGraph" Title="Graph">
                                 <v:NetworkGraphControl />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>

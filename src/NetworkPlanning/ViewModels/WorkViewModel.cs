@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Shapes;
 using NetworkPlanning.Abstraction;
 using NetworkPlanning.Commands;
@@ -35,7 +35,12 @@ namespace NetworkPlanning.ViewModels
         public AppCommands AppCommands { get; }
         public EventViewModel EndEvent { get; }
         public Line Line { get; } = new Line();
-        public TextBlock LineText { get; } = new TextBlock {Foreground = Brushes.Blue};
+
+        public TextBlock LineText { get; } =
+            new TextBlock
+            {
+                Style = Application.Current.FindResource("LineText") as Style
+            };
 
         public bool IsRecursivelyValidating { get; set; }
 
